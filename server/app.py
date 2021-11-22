@@ -9,7 +9,7 @@ class resource:
     def on_get(self, req, resp):
         """Handles GET requests"""
         if req.get_param("id"):
-            resp.media = {'user_id': id, "keywords":[],"description": "", "lat": "" , "lon": "" }
+            resp.media = {'user_id': ITEMS.user_id, "keywords":[ITEMS.keywords],"description": ITEMS.description, "lat": ITEMS.lat , "lon": ITEMS.lon }
         
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
@@ -31,9 +31,6 @@ class resource:
         resp.content_type = falcon.MEDIA_JSON
         
 
-    
-
-#api = openapi.yml
 
 app = application = falcon.App()
 app.add_route('/', resource())
