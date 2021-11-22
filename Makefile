@@ -1,8 +1,8 @@
-
-DOCKER_COMPOSE:=USER=$(shell id -u):$(shell id -g) docker-compose --file docker-compose.yml
+_DOCKER_COMPOSE:=USER=$(shell id -u):$(shell id -g) docker-compose
+DOCKER_COMPOSE:=${_DOCKER_COMPOSE} --file docker-compose.yml
 DOCKER_COMPOSE_EXAMPLE:=${DOCKER_COMPOSE} --file docker-compose.example.server.yml --file docker-compose.example.client.yml
-DOCKER_COMPOSE_TEST:=${DOCKER_COMPOSE} --file docker-compose.test.yml
-DOCKER_COMPOSE_EXAMPLE_TEST:=${DOCKER_COMPOSE_EXAMPLE} --file docker-compose.test.yml
+DOCKER_COMPOSE_TEST:=${DOCKER_COMPOSE} --file docker-compose.cypress.yml --file docker-compose.test.yml
+DOCKER_COMPOSE_EXAMPLE_TEST:=${DOCKER_COMPOSE_EXAMPLE} --file docker-compose.cypress.yml --file docker-compose.test.yml
 
 .PHONY: help
 .DEFAULT_GOAL:=help
@@ -44,3 +44,7 @@ test_example_client:  ##
 cypress:  ## Launch local cypress from container (requires an XServer and DISPLAY env)
 	${DOCKER_COMPOSE_EXAMPLE_TEST} run --rm --env DISPLAY client_test open --project .
 	${DOCKER_COMPOSE_EXAMPLE_TEST} down
+cypress_cmd:
+	${_DOCKER_COMPOSE} --file docker-compose.cypress.yml \
+		run --rm client_test \
+			${CYPRESS_CMD}

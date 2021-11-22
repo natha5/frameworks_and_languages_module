@@ -145,21 +145,22 @@ def test_items(ENDPOINT):
     assert isinstance(items, list)
 
 
+def test_items_has_posted_item(ENDPOINT, item_factory):
+    """
+    Create new_item and check that it appears in the items list
+    """
+    new_item = item_factory()
+    response = requests.get(ENDPOINT + f"/items")
+    item_ids = tuple(item['id'] for item in response.json())
+    assert new_item['id'] in item_ids
+
+
 @pytest.fixture
 def get_items(ENDPOINT):
     def _get_items(**kwargs):
         kwargs = {k:v if not isiterable(v) else ','.join(v) for k,v in kwargs.items()}  # encode arrays as comma separated
         return requests.get(ENDPOINT + f"/items?" + urllib.parse.urlencode(kwargs)).json()
     return _get_items
-
-
-def test_items_filter_location(get_items, item_factory):
-    # Create mock items in line
-    for lat in (100+(i*0.1) for i in range(6)):
-        item_factory(lat=lat, lon=20.0)
-    
-    items = get_items(lat=100, lon=20.0, radius=0.21)
-    assert len(items) == 3, "should return lat=100 + lat=100.1 + lat=100.2"
 
 
 def test_items_filter_username(get_items, item_factory):
@@ -170,6 +171,17 @@ def test_items_filter_username(get_items, item_factory):
     assert len(items) == 2, "There should be items posted by user1"
 
 
+@pytest.mark.skip(reason="optional advanced functionality")
+def test_items_filter_location(get_items, item_factory):
+    # Create mock items in line
+    for lat in (100+(i*0.1) for i in range(6)):
+        item_factory(lat=lat, lon=20.0)
+    
+    items = get_items(lat=100, lon=20.0, radius=0.21)
+    assert len(items) == 3, "should return lat=100 + lat=100.1 + lat=100.2"
+
+
+@pytest.mark.skip(reason="optional advanced functionality")
 def test_items_filter_date_from(get_items, item_factory):
     for i in range(2):
         item_factory()
@@ -180,6 +192,7 @@ def test_items_filter_date_from(get_items, item_factory):
     assert len(items) == 2, "There should be items posted since the date_from"
 
 
+@pytest.mark.skip(reason="optional advanced functionality")
 def test_items_filter_keywords(get_items, item_factory):
     item_factory(keywords=("test1", "test2"))
     item_factory(keywords=("test2", "test3"))

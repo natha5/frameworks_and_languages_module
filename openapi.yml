@@ -255,11 +255,11 @@ components:
     Item:
       required:
         - date_from
-        - item_id
+        - id
       allOf:
         - type: object
           properties:
-            item_id:
+            id:
               description: Item ID
               allOf:
                 - $ref: '#/components/schemas/Id'
