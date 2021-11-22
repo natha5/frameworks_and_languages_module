@@ -3,7 +3,7 @@ import falcon
 import json
 
 from wsgiref import simple_server
-from datastore import ITEMS
+from dataStore import ITEMS
 
 class resource:
     def on_get(self, req, resp):
@@ -18,7 +18,7 @@ class resource:
     def on_post(self, req, resp):
         """Handles POST requests"""
 
-        resp.media = {"id" : ITEMS.id, 'user_id' : ITEMS.user_id, 'description' : }
+        resp.media = {"id" : ITEMS.id, 'user_id' : ITEMS.user_id, 'description' : ""}
 
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
@@ -33,10 +33,16 @@ class resource:
 
     
 
-api = openapi.yml
+#api = openapi.yml
 
 app = application = falcon.App()
 app.add_route('/', resource())
 
-server = make_server('localhost', 8000, application)
-server.serve_forever()
+if __name__ == '__main__':
+
+    server = simple_server.make_server("0.0.0.0", 8000, app)
+
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
