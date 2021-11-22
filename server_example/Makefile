@@ -14,4 +14,4 @@ test:
 	docker build --tag ${DOCKER_IMAGE} --target test .
 
 run:
-	docker run -it --rm ${DOCKER_IMAGE}
+	docker run -it --rm --publish 8000:8000 ${DOCKER_IMAGE}

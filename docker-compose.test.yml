@@ -11,29 +11,11 @@ services:
         - server
 
   client_test:
-    #build:
-    #  context: ./client_test/
-    image: cypress/included:8.7.0
     links:
         - server
         - client
-    working_dir: /tests
     environment:
       #- DISPLAY
       - CYPRESS_BASE_URL=http://client:8001/?api=http://server:8000
     #user: ${USER}  # ummm, problems with user on cypress startup
-    volumes:
-      # USER passthrough
-      - /etc/passwd:/etc/passwd:ro
-      - /etc/group:/etc/group:ro
-      # mount tests - readonly
-      - ${PWD}/client_test/cypress.json:/tests/cypress.json:ro
-      - ${PWD}/client_test/cypress:/tests/cypress:ro
-      # mount reports - writeable
-      - ${PWD}/client_test/reports:/tests/reports:rw
-      # output paths are redundent and now set in `cypress.json` to be ./reports
-      #- ${PWD}/client_test/reports:/tests/cypress/screenshots:rw
-      #- ${PWD}/client_test/reports:/tests/cypress/videos:rw
-    entrypoint: ["cypress"]
-    command: ["run"]
-    #command: ["open", "--project", "."]
+
