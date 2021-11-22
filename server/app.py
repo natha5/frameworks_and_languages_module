@@ -9,7 +9,7 @@ class resource:
     def on_get(self, req, resp):
         """Handles GET requests"""
         if req.get_param("id"):
-            resp.media = {'user_id': ITEMS.user_id, "keywords":[ITEMS.keywords],"description": ITEMS.description, "lat": ITEMS.lat , "lon": ITEMS.lon }
+            resp.media = {'user_id': "", "keywords":"","description": "", "lat": "" , "lon": "" }
         
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
@@ -33,7 +33,9 @@ class resource:
 
 
 app = application = falcon.App()
-app.add_route('/', resource())
+app.add_route('/get', resource.on_get())
+app.add_route('/post', resource.on_post())
+app.add_route('/delete' , resource.on_delete())
 
 if __name__ == '__main__':
 
