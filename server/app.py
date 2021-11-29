@@ -8,7 +8,7 @@ from dataStore import ITEMS
 
 
 
-class resource:
+class ItemResource:
     def on_get(self, req):
         """Handles GET requests"""
         if req.get_param("id"):
@@ -17,7 +17,11 @@ class resource:
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
     
-   
+    
+       
+class ItemsResource:
+
+class PostResource:
     def on_post(self, req, resp):
         """Handles POST requests"""
 
@@ -26,16 +30,17 @@ class resource:
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
 
-
-
+class DeleteResource:
     def on_delete(self, req, resp):
         """Handles DELETE requests"""
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
-        
-
 
 app = application = falcon.App()
+
+app.add_route('/resource', resource())
+
+
 app.add_route('/get', resource.on_get(ITEMS['id'], ITEMS))
 app.add_route('/post', resource.on_post())
 app.add_route('/delete' , resource.on_delete())
