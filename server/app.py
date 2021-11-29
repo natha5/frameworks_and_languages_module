@@ -1,5 +1,4 @@
 import falcon
-
 import json
 
 from wsgiref import simple_server
@@ -7,19 +6,27 @@ from dataStore import ITEMS
 
 
 
-
 class ItemResource:
-    def on_get(self, req):
-        """Handles GET requests"""
+    def on_get(self, req, resp):
+        """Handles GET request for single item"""
         if req.get_param("id"):
             resp.media = {'user_id': "", "keywords":"","description": "", "lat": "" , "lon": "" }
         
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
     
-    
+
+class MultipleItemsResource:
+    def on_get(self, req, resp):
+        """Handles GET request for multiple items"""
+        if req.get_param("id"):
+            resp.media
+
+        resp.status = falcon.HTTP_200
+        resp.content_type = falcon.MEDIA_JSON
+
        
-class ItemsResource:
+
 
 class PostResource:
     def on_post(self, req, resp):
@@ -30,20 +37,23 @@ class PostResource:
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
 
+
+
 class DeleteResource:
     def on_delete(self, req, resp):
         """Handles DELETE requests"""
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
 
+
+
 app = application = falcon.App()
 
-app.add_route('/resource', resource())
 
-
-app.add_route('/get', resource.on_get(ITEMS['id'], ITEMS))
-app.add_route('/post', resource.on_post())
-app.add_route('/delete' , resource.on_delete())
+app.add_route('/get', ItemResource())
+app.add_route('/getmany', MultipleItemsResource())
+app.add_route('/post', PostResource())
+app.add_route('/delete' , DeleteResource())
 
 if __name__ == '__main__':
 
