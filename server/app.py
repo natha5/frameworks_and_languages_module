@@ -33,7 +33,7 @@ class resource:
 
 
 app = application = falcon.App()
-app.add_route('/get', resource.on_get())
+app.add_route('/get', resource.on_get(id, ITEMS))
 app.add_route('/post', resource.on_post())
 app.add_route('/delete' , resource.on_delete())
 
