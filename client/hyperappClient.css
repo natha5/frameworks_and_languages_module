@@ -1,0 +1,59 @@
+@import url('https://cdn.jsdelivr.net/npm/water.css@2/out/light.css');
+
+:root {
+  --box-width: 200px;
+}
+
+main { position: relative;}
+
+.person {
+  box-sizing: border-box;
+  width: var(--box-width);
+  padding: 10px 10px 10px 40px;
+  position: relative;
+  border: 1px #ddd solid;
+  border-radius: 5px;  
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.person.highlight {
+  background-color: #fd9;
+}
+.person.selected {
+  border-width: 3px;
+  border-color: #55c;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.person input[type=checkbox] {
+  position: absolute;
+  cursor: default;
+  top: 10px;
+  left: 7px;
+}
+.person.selected input[type=checkbox] {
+  left: 5px;
+  top: 8px;
+}
+
+.person p {
+  margin: 0;
+  margin-left: 2px;
+}
+.person.selected p {
+  margin-left: 0;
+} 
+
+.bio {
+  position: absolute;
+  left: calc(var(--box-width) + 2rem);
+  top: 60px;
+  color: #55c;
+  font-style: italic;
+  font-size: 2rem;
+  text-indent: -1rem;
+}
+.bio:before {content: '"';}
+.bio:after {content: '"';}
