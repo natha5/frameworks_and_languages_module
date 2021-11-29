@@ -5,8 +5,11 @@ import json
 from wsgiref import simple_server
 from dataStore import ITEMS
 
+
+
+
 class resource:
-    def on_get(self, req, resp):
+    def on_get(self, req):
         """Handles GET requests"""
         if req.get_param("id"):
             resp.media = {'user_id': "", "keywords":"","description": "", "lat": "" , "lon": "" }
@@ -33,7 +36,7 @@ class resource:
 
 
 app = application = falcon.App()
-app.add_route('/get', resource.on_get(id, ITEMS))
+app.add_route('/get', resource.on_get(ITEMS['id'], ITEMS))
 app.add_route('/post', resource.on_post())
 app.add_route('/delete' , resource.on_delete())
 
