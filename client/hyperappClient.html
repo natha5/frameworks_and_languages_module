@@ -24,19 +24,31 @@
       const AddKeywords = (state) => ({
         ...state,
         value: "",
-        items: state
+        keywords: state.keywords.concat(state.value)
       })
 
 
       app({
         init:{ items: ["ufiewrguih"], value: ""},
-        view: ({ items, value }) => h("main", {}, [
+        view: ({ items,keywords, value }) => h("main", {}, [
           h("h1", {}, text("list")),
           h("ul", {},
             items.map((item) => h("li", {}, text(item)))
           ),
-          h("h1", {}, text("keywords")),
-          h("input", {type: "text", oninput: NewValue, value}),
+          
+
+
+          h("keywords", {}, [
+            h("h1", {}, text("keywords")),
+            h("input", {type: "text", oninput: NewValue, value}),
+            h("button", { onclick: AddKeywords}, text("Add keyword")),
+            h("h1", {}, text("Current keywords:")),
+            h("ul", {},
+              keywords.map((keyword) => h("li", {}, text(keyword)))
+            ),
+          ]),
+          
+
           h("h1", {}, text("Description")),
           h("input", {type: "text", oninput: NewValue, value}),
           h("h1", {}, text("Image url")),
