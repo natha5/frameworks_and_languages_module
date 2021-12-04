@@ -9,11 +9,43 @@
 
       import {h, text, app} from "https://cdn.skypack.dev/hyperapp"
 
+
+      const AddItem = (state) => ({
+        ...state,
+        value: "",
+        items: state.items.concat(state.value)
+      })
+
+      const NewValue = (state, event) => ({
+        ...state,
+        value: event.target.value,
+      })
+
+      const AddKeywords = (state) => ({
+        ...state,
+        value: "",
+        items: state
+      })
+
+
       app({
-        view: () => h("main", {}, [
-          h("div", {class: "person"}, [
-            h("p", {}, text("Hello world")),
-          ]),
+        init:{ items: ["ufiewrguih"], value: ""},
+        view: ({ items, value }) => h("main", {}, [
+          h("h1", {}, text("list")),
+          h("ul", {},
+            items.map((item) => h("li", {}, text(item)))
+          ),
+          h("h1", {}, text("keywords")),
+          h("input", {type: "text", oninput: NewValue, value}),
+          h("h1", {}, text("Description")),
+          h("input", {type: "text", oninput: NewValue, value}),
+          h("h1", {}, text("Image url")),
+          h("input", {type: "text", oninput: NewValue, value}),
+          h("h1", {}, text("latitude")),
+          h("input", {type: "text", oninput: NewValue, value}),
+          h("h1", {}, text("longitude")),
+          h("input", {type: "text", oninput: NewValue, value}),
+          h("button", { onclick: AddItem}, text("Add item")),
         ]),
       node: document.getElementById("app"),
     })
