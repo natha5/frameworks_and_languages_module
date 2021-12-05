@@ -33,19 +33,18 @@
         view: ({ items,keywords, value }) => h("main", {}, [
           h("h1", {}, text("list")),
           h("ul", {},
-            items.map((item) => h("li", {}, text(item)))
+            items.map((item) => h("li", {}, text(item))),
           ),
           
 
-
-          h("keywords", {}, [
+          h("section", {}, [
             h("h1", {}, text("keywords")),
             h("input", {type: "text", oninput: NewValue, value}),
             h("button", { onclick: AddKeywords}, text("Add keyword")),
             h("h1", {}, text("Current keywords:")),
             h("ul", {},
-              keywords.map((keyword) => h("li", {}, text(keyword)))
-            ),
+              keywords.map((keyword) => h("li", {}, text(keyword))),
+            )
           ]),
           
 
@@ -53,11 +52,27 @@
           h("input", {type: "text", oninput: NewValue, value}),
           h("h1", {}, text("Image url")),
           h("input", {type: "text", oninput: NewValue, value}),
-          h("h1", {}, text("latitude")),
-          h("input", {type: "text", oninput: NewValue, value}),
-          h("h1", {}, text("longitude")),
-          h("input", {type: "text", oninput: NewValue, value}),
+
+          h("section", {}, [
+            h("h1", {}, text("latitude")),
+            h("input", {type: "text", oninput: NewValue, value}),
+            h("h1", {}, text("longitude")),
+            h("input", {type: "text", oninput: NewValue, value}),
+          ]),
+          
+          
           h("button", { onclick: AddItem}, text("Add item")),
+
+
+
+          h("section", {} [
+            h("h1", {}, text("Get data")),
+            h("")
+          ]),
+
+
+
+
         ]),
       node: document.getElementById("app"),
     })
