@@ -23,15 +23,45 @@
 
       const NewKeyword = (state, event) => ({
         ...state,
-        value: event.target.value,
+        keywordValue: event.target.keywordValue,
       })
 
       const AddKeywords = (state) => ({
         ...state,
-        value: "",
+        keywordValue: "",
         keywords: state.keywords.concat(state.value)
       })
 
+      const NewDescription = (state, event) => ({
+        ...state,
+        descriptionValue: event.target.descriptionValue,
+        
+      })
+
+      /*const AddDescription = (state) => ({
+        ...state,
+        descriptionValue: "",
+        description: state.keywords.concat(state.value)
+      })*/
+
+      const NewImageURL = (state, event) => ({
+        ...state,
+        URLValue: event.target.URLValue,
+      })
+
+      const NewLatitude = (state, event) => ({
+        ...state,
+        latitudeValue: event.target.latitudeValue,
+      })
+
+      const NewLongitude = (state, event) => ({
+        ...state,
+        longitudeValue: event.target.longitudeValue,
+      })
+
+
+
+      
       /*const DeleteItem = (state, event) => ({
         ...state,
         value: event.target.value,
@@ -41,38 +71,24 @@
       }) */
 
       app({
-        init:{ items: [], keywords: [], value: ""},
+        init:{ items: [], keywords: [], value: "", keywordValue: ""},
         
-        view: ({ items, keywords, value }) => h("main", {}, [
-          h("h1", {}, text("list")),
-          h("ul", {},
-            items.map((item) => h("li", {}, text(item))),
-          ),
-          
+        view: ({ items, keywords, description,  URL, value, InputBoxes }) => h("main", {}, [
 
           h("h1", {}, text("Add item")),
           h("h2", {}, text("Keywords")),
-          h("input", { type: "text", oninput: NewKeyword, value }),
+          h("input", { type: "text", placeholder:"Keyword", oninput: NewKeyword}),
           h("button", { onclick: AddKeywords }, text("Add keyword")),
           h("h3", {}, text("Current keywords:")),
           h("ul", {},
             keywords.map((keyword) => h("li", {}, text(keyword))),
           ),
 
-
-          h("h2", {}, text("Description")),
-          h("input", { type: "text", oninput: NewValue, value }),
-          h("h2", {}, text("Image url")),
-          h("input", { type: "text", oninput: NewValue, value }),
-
-          
-          h("h2", {}, text("latitude")),
-          h("input", { type: "text", oninput: NewValue, value }),
-          h("h2", {}, text("longitude")),
-          h("input", { type: "text", oninput: NewValue, value }),
-          
-          
-          
+          h("h2", {}, text("Enter data: ")),
+          h("input", { type: "text", name:"description", placeholder:"Description", oninput: NewDescription }),
+          h("input", { type: "text", name:"URL", placeholder:"Image URL", oninput: NewImageURL }),
+          h("input", { type: "text", name:"latitude", placeholder:"Latitude", oninput: NewLatitude }),
+          h("input", { type: "text", name:"longitude", placeholder:"Longitude", oninput: NewLongitude }),
           h("button", { onclick: AddItem }, text("Add item")),
 
 
@@ -80,6 +96,10 @@
           
           h("h1", {}, text("Get data")),
           
+          
+          h("ul", {},
+            items.map((item) => h("li", {}, text(item))),
+          ),
       
           h("h1",{}, text("Delete data")),
           h("h2", {}, text("Enter id of data to delete")),

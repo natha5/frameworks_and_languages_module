@@ -5,7 +5,6 @@ from wsgiref import simple_server
 from dataStore import ITEMS
 
 
-
 class ItemResource:
     def on_get(self, req, resp):
         """Handles GET request for single item"""
@@ -25,7 +24,6 @@ class MultipleItemsResource:
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
 
-       
 
 
 class PostResource:
