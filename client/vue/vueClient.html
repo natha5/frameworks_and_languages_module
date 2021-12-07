@@ -3,15 +3,20 @@
     <head>
         <meta charset="utf-8"/>
         <title>Vue client</title>
+        <link rel="stylesheet">
     </head>
     <body>
-        <h1Freecycle</h1>
+        <h1>Freecycle</h1>
         <div id="enter data">
             <h2>Add new data</h2>
             <div id="enter keywords">
                 <h3>Keywords</h3>
-                <input name="keywords" type="text" placeholder="enter keyword">
-                <button type="button">Add keyword</button>
+                <input v-model="keyword" name="keywords" type="text" placeholder="enter keyword">
+                <button @click="addKeyword" :disabled="newKeyword.length === 0" type="submit">Add keyword</button>
+                
+                <div v-for="(keyword) of keywords" :key="keyword.id" class="list-group-keyword">
+                    {{ keyword }}
+                </div>     
             </div>
 
             <h3>Description</h3>
@@ -26,6 +31,7 @@
             <button type="button">Enter data</button>
 
         </div>
+
         <div id="Get data">
             <h2>Get data</h2>
         </div>
@@ -39,7 +45,29 @@
         
         
         <script>
-
+        
+            
+            new Vue( {
+                name: "App",
+                data () {
+                    return {
+                        keyword: "",
+                        keywords: [],
+                    };
+                },
+                
+                methods: {
+                    addKeyword () {
+                        const { keyword } = this;
+                        this.keywords.push({
+                            id: this.keywords.length + 1,
+                            name: this.newKeyword,
+                        });
+                        this.newKeyword = '';
+                    },
+                },
+            });
+            Vue.createApp("App").mount()
         </script>
     </body>
 </html>
