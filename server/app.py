@@ -5,11 +5,13 @@ from wsgiref import simple_server
 from dataStore import ITEMS
 
 
+
+
 class ItemResource:
     def on_get(self, req, resp):
         """Handles GET request for single item"""
-        if req.get_param("itemId"):
-            resp.media = {'id': "", "keywords":"","description": "", "lat": "" , "lon": "" }
+        if req.param("id"):
+            resp.media = {'id': "", 'keywords': "",'description': "", 'lat': "", 'lon': "" }
         
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
@@ -55,11 +57,10 @@ class DeleteResource:
 
 app = application = falcon.App()
 
-
-app.add_route('/item/{itemId}', ItemResource())
+app.add_route('/item/', PostResource())
+app.add_route('/item/{itemId}/', ItemResource())
 app.add_route('/items', MultipleItemsResource())
-app.add_route('/post', PostResource())
-app.add_route('/delete/{itemId}' , DeleteResource())
+app.add_route('/item/{itemId}/' , DeleteResource())
 
 if __name__ == '__main__':
 
