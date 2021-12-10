@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+    
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,18 +8,25 @@
         <link rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
     </head>
+
+
     <body>
         <h1>Freecycle</h1>
         <div id="enter data">
             <h2>Add new data</h2>
             <div id="enter keywords">
                 <h3>Keywords</h3>
-                <input v-model="keyword" name="keywords" type="text" placeholder="enter keyword">
+                <input v-model="newKeyword" name="keywords" type="text" placeholder="enter keyword" @keyup.enter="addKeyword">
                 <button @click="addKeyword" :disabled="newKeyword.length === 0" type="submit">Add keyword</button>
                 
-                <div v-for="(keyword) of keywords" :key="keyword.id" class="list-group-keyword">
-                    {{ keyword }}
-                </div>     
+                <h4>Existing keywords:</h4>
+                <ul class="list">
+                    <li class="list-keyword" v-for="keyword in reversedKeywords">
+                        <span>{{ keyword.name }}</span>
+                        <div class="list-item-delete" @click="removeKeyword(item)">X</div>
+                    </li>
+                </ul>
+                    
             </div>
 
             <h3>Description</h3>
@@ -48,22 +56,31 @@
         <script>
             
             new Vue( {
-                name: "App",
-                data () {
-                    return {
-                        keyword: "",
+                el: "#app",
+                data: {
+                    
+                        newKeyword: '',
                         keywords: [],
-                    };
+                    },
+                computed: {
+                    reversedKeywords(){
+                        return this.keywords.slice( 0 ).reverse();
+                    },
                 },
                 
+                
                 methods: {
-                    addKeyword () {
-                        const { keyword } = this;
-                        this.keywords.push({
+                    addKeyword: function () {
+                        this.keywords.push( {
                             id: this.keywords.length + 1,
-                            name: this.newKeyword,
-                        });
+                            name: this.newKeyword
+                        } );
                         this.newKeyword = '';
+                        
+                        
+                    },
+                    removeKeyword: function ( item ) {
+                        this.keywords = this.keywords.filter( ( newKeyword ) => newKeyword.name !== keyword.name );
                     },
                 },
             });
