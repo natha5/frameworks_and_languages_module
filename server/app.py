@@ -21,19 +21,30 @@ class ItemResource:
 class MultipleItemsResource:
     def on_get(self, req, resp):
         """Handles GET request for multiple items"""
-        if req.get_param("id"):
+        if req.param("id"):
             resp.media
 
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
+        pass
 
 
 
 class PostResource:
     def on_post(self, req, resp):
         """Handles POST requests"""
+        obj = req.get_media()
+        print(obj)
 
-        resp.media = {"id" : ITEMS.id, 'user_id' : ITEMS.user_id, 'description' : ""}
+        id = obj.get('id')
+        description = obj.get('description')
+        lat = obj.get('lat')
+        lon = obj.get('lon')
+        keywords = obj.get('keywords')
+
+
+
+        resp.media = {'id' : id,  'description' : description, 'lat' : lat, 'lon' : lon , 'keywords' : keywords}
 
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
@@ -57,7 +68,7 @@ class DeleteResource:
 
 app = application = falcon.App()
 
-app.add_route('/item/', PostResource())
+app.add_route('/item', PostResource())
 app.add_route('/item/{itemId}/', ItemResource())
 app.add_route('/items', MultipleItemsResource())
 app.add_route('/item/{itemId}/' , DeleteResource())
