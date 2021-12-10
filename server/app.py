@@ -8,11 +8,12 @@ from dataStore import ITEMS
 class ItemResource:
     def on_get(self, req, resp):
         """Handles GET request for single item"""
-        if req.get_param("id"):
-            resp.media = {'user_id': "", "keywords":"","description": "", "lat": "" , "lon": "" }
+        if req.get_param("itemId"):
+            resp.media = {'id': "", "keywords":"","description": "", "lat": "" , "lon": "" }
         
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
+        pass
     
 
 class MultipleItemsResource:
@@ -34,6 +35,7 @@ class PostResource:
 
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
+        pass
 
 
 
@@ -43,15 +45,21 @@ class DeleteResource:
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
 
+#class OptionsResource:
+#    def on_options(self, req, resp):
+#
+#        resp.status = falcon.HTTP_200
+#        resp.content_type = falcon.MEDIA_JSON
+
 
 
 app = application = falcon.App()
 
 
-app.add_route('/get', ItemResource())
-app.add_route('/getmany', MultipleItemsResource())
+app.add_route('/item/{itemId}', ItemResource())
+app.add_route('/items', MultipleItemsResource())
 app.add_route('/post', PostResource())
-app.add_route('/delete/{itemID}' , DeleteResource())
+app.add_route('/delete/{itemId}' , DeleteResource())
 
 if __name__ == '__main__':
 
