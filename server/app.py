@@ -51,7 +51,7 @@ app = application = falcon.App()
 app.add_route('/get', ItemResource())
 app.add_route('/getmany', MultipleItemsResource())
 app.add_route('/post', PostResource())
-app.add_route('/delete' , DeleteResource())
+app.add_route('/delete/{itemID}' , DeleteResource())
 
 if __name__ == '__main__':
 
