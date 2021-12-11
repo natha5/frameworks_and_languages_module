@@ -33,22 +33,13 @@ class MultipleItemsResource:
 class PostResource:
     def on_post(self, req, resp):
         """Handles POST requests"""
-        obj = req.get_media()
-        print(obj)
-
-        id = obj.get('id')
-        description = obj.get('description')
-        lat = obj.get('lat')
-        lon = obj.get('lon')
-        keywords = obj.get('keywords')
-
-
-
-        resp.media = {'id' : id,  'description' : description, 'lat' : lat, 'lon' : lon , 'keywords' : keywords}
-
+        
+        resp.media = {'id' : itemId, 'lat' : lat, 'lon' : lon, 'description' : description, 'keywords' : keywords}
+      
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
         pass
+
 
 
 
