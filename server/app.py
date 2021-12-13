@@ -43,9 +43,11 @@ class PostResource:
         #create new values that arent inputted by user
         date_from = datetime.datetime.now()
         date_to = datetime.datetime.now()
-        id = max(ITEMS.values()) + 1
+        id = max(ITEMS.keys()) + 1
 
         ## check got the right fields
+
+        ## use sets. after lunch
         if not keywords:
             resp.status = falcon.HTTP_204
         elif not description:
