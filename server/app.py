@@ -1,9 +1,9 @@
 import falcon
 import json
+import datetime
 
 from wsgiref import simple_server
-from dataStore import ITEMS
-
+from dataStore import *
 
 
 
@@ -16,13 +16,16 @@ class ItemResource:
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
         pass
-    
+    def on_delete(self, req, resp, itemId):
+        """Handles DELETE requests"""
+        resp.status = falcon.HTTP_200
+        resp.content_type = falcon.MEDIA_JSON
 
 class MultipleItemsResource:
     def on_get(self, req, resp):
         """Handles GET request for multiple items"""
         #if req.param("id"):
-        resp.media
+        resp.media = json.dumps(ITEMS)
 
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
@@ -34,23 +37,46 @@ class PostResource:
     def on_post(self, req, resp):
         """Handles POST requests"""
         app = json.load(req.bounded_stream)
-        ITEMS.append(app)
+        
+        #data = req.JSON
+
+        #create new values that arent inputted by user
+        date_from = datetime.datetime.now()
+        date_to = datetime.datetime.now()
+        #id = items_id_max + 1
+
+        ## check got the right fields
+        if not keywords:
+            resp.status = falcon.HTTP_204
+        elif not description:
+            resp.status = falcon.HTTP_204
+        elif not user_id:
+            resp.status = falcon.HTTP_204
+        elif not lat:
+            resp.status = falcon.HTTP_204
+        elif not lon:
+            resp.status = falcon.HTTP_204
+        else:
+            ITEMS[new_id] = req.JSON
+            
+            ITEMS.add()
+            
+            resp.status = falcon.HTTP_201
+        
+
+        
 
 
+        resp.content_type = falcon.MEDIA_JSON
         #resp.media = {'id' : itemId, 'lat' : lat, 'lon' : lon, 'description' : description, 'keywords' : keywords}
       
-        resp.status = falcon.HTTP_200
-        resp.content_type = falcon.MEDIA_JSON
+        
         pass
 
 
 
 
-class DeleteResource:
-    def on_delete(self, req, resp):
-        """Handles DELETE requests"""
-        resp.status = falcon.HTTP_200
-        resp.content_type = falcon.MEDIA_JSON
+    
 
 #class OptionsResource:
 #    def on_options(self, req, resp):
@@ -59,13 +85,17 @@ class DeleteResource:
 #        resp.content_type = falcon.MEDIA_JSON
 
 
+app = falcon.App(middleware=falcon.CORSMiddleware(
+    allow_origins='http://localhost:8001', allow_credentials='*'))
+    #allow_origins='https://8001-apricot-beaver-j6aztah6.ws-eu23.gitpod.io' , allow_credentials='*'))
+
 
 app = application = falcon.App()
 
 app.add_route('/item', PostResource())
 app.add_route('/item/{itemId}/', ItemResource())
 app.add_route('/items', MultipleItemsResource())
-app.add_route('/item/{itemId}/' , DeleteResource())
+
 
 if __name__ == '__main__':
 

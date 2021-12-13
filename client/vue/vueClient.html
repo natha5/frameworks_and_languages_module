@@ -54,10 +54,10 @@
         
         
         <script type="module">
-            import Vue from 'vue'
             
-            var app = new Vue( {
-                el: "#app",
+            
+            var app  = {
+                
                 data: {
                     
                         keyword: '',
@@ -78,7 +78,7 @@
                         this.keywords = this.keywords.filter( ( newKeyword ) => newKeyword.name !== keyword.name );
                     },
                 },
-            });
+            };
             Vue.createApp("App").mount()
         </script>
     </body>
