@@ -46,28 +46,19 @@ class PostResource:
         id = max(ITEMS.keys()) + 1
 
         ## check got the right fields
+        
 
-        ## use sets. after lunch
-        if not keywords:
-            resp.status = falcon.HTTP_204
-        elif not description:
-            resp.status = falcon.HTTP_204
-        elif not user_id:
-            resp.status = falcon.HTTP_204
-        elif not lat:
-            resp.status = falcon.HTTP_204
-        elif not lon:
-            resp.status = falcon.HTTP_204
-        else:
+        fields = set({user_id, keywords, description, image, lat, lon})
+
+        if(ITEMS.keys != fields){
+            resp.status = HTTP_204
+        }else{
             ITEMS[new_id] = req.JSON
             
             ITEMS.add()
             
             resp.status = falcon.HTTP_201
-        
-
-        
-
+        }
 
         resp.content_type = falcon.MEDIA_JSON
         #resp.media = {'id' : itemId, 'lat' : lat, 'lon' : lon, 'description' : description, 'keywords' : keywords}
@@ -87,6 +78,7 @@ class PostResource:
 #        resp.content_type = falcon.MEDIA_JSON
 
 
+#cors handling
 app = falcon.App(middleware=falcon.CORSMiddleware(
     allow_origins='http://localhost:8001', allow_credentials='*'))
     #allow_origins='https://8001-apricot-beaver-j6aztah6.ws-eu23.gitpod.io' , allow_credentials='*'))
@@ -102,7 +94,6 @@ app.add_route('/items', MultipleItemsResource())
 if __name__ == '__main__':
 
     server = simple_server.make_server("0.0.0.0", 8000, app)
-
     try:
         server.serve_forever()
     except KeyboardInterrupt:
