@@ -43,7 +43,7 @@ class PostResource:
         #create new values that arent inputted by user
         date_from = datetime.datetime.now()
         date_to = datetime.datetime.now()
-        #id = items_id_max + 1
+        id = max(ITEMS.values()) + 1
 
         ## check got the right fields
         if not keywords:
