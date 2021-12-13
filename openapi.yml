@@ -51,6 +51,8 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/ItemCreate'
       responses:
+        '201':
+          description: Item created successfully
         '405':
           description: Invalid input
   '/item/{itemId}/':

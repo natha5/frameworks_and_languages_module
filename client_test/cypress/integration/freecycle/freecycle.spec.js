@@ -46,12 +46,12 @@ describe('FreeCycle', () => {
 			cy.get(`#main [name="${k}"]`).clear().type(v);
 		}
 		cy.get('#main [data-action="create_item"]').click();
-		return cy.contains(uuid).should('be.visible').parent('li').find('[data-field="id"]').invoke('text');
+		return cy.contains(uuid).should('be.visible').parents('li').find('[data-field="id"]').invoke('text');
 	})
 	Cypress.Commands.add('delete_item', (item_id) => {
 		//cy.navigate("MyItems");  // HACK - Simplify Client
 		cy.contains(`[data-field="id"]`, item_id).should('exist');
-		cy.contains(`[data-field="id"]`, item_id).parent("li").find(`[data-action="delete"]`).click();
+		cy.contains(`[data-field="id"]`, item_id).parents("li").find(`[data-action="delete"]`).click();
 		cy.contains(`[data-field="id"]`, item_id).should('not.exist');
 	})
 

@@ -28,7 +28,7 @@ test_server:  ##
 	${DOCKER_COMPOSE_TEST} up --build server_test
 	${DOCKER_COMPOSE_TEST} down
 test_client:  ##
-	${DOCKER_COMPOSE_TEST} up --buils client_test
+	${DOCKER_COMPOSE_TEST} up --build client_test
 	${DOCKER_COMPOSE_TEST} down
 
 #test_example:  ##
