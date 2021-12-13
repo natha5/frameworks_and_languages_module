@@ -8,10 +8,10 @@ from dataStore import ITEMS
 
 
 class ItemResource:
-    def on_get(self, req, resp):
+    def on_get(self, req, resp, itemId):
         """Handles GET request for single item"""
-        if req.param("id"):
-            resp.media = {'id': "", 'keywords': "",'description': "", 'lat': "", 'lon': "" }
+        
+        resp.media = json.dumps(ITEMS)
         
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
@@ -21,8 +21,8 @@ class ItemResource:
 class MultipleItemsResource:
     def on_get(self, req, resp):
         """Handles GET request for multiple items"""
-        if req.param("id"):
-            resp.media
+        #if req.param("id"):
+        resp.media
 
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
@@ -33,8 +33,11 @@ class MultipleItemsResource:
 class PostResource:
     def on_post(self, req, resp):
         """Handles POST requests"""
-        
-        resp.media = {'id' : itemId, 'lat' : lat, 'lon' : lon, 'description' : description, 'keywords' : keywords}
+        app = json.load(req.bounded_stream)
+        ITEMS.append(app)
+
+
+        #resp.media = {'id' : itemId, 'lat' : lat, 'lon' : lon, 'description' : description, 'keywords' : keywords}
       
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
