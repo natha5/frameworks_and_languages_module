@@ -48,24 +48,26 @@ class PostResource:
         ## check got the right fields
         
 
-        fields = set({user_id, keywords, description, image, lat, lon})
+        fields = set({'user_id', 'keywords', 'description', 'image', 'lat', 'lon'})
 
-        if(ITEMS.keys != fields){
-            resp.status = HTTP_204
-        }else{
-            ITEMS[new_id] = req.JSON
+        if(ITEMS.keys != fields):
+            resp.status = falcon.HTTP_204
+        else:
+            ITEMS[id] = req.JSON
             
             ITEMS.add()
             
             resp.status = falcon.HTTP_201
-        }
+        
 
         resp.content_type = falcon.MEDIA_JSON
         #resp.media = {'id' : itemId, 'lat' : lat, 'lon' : lon, 'description' : description, 'keywords' : keywords}
-      
-        
+
         pass
 
+class rootResource:
+    def on_get(self, resp, req):
+        resp.status = falcon. HTTP_200
 
 
 
@@ -86,6 +88,7 @@ app = falcon.App(middleware=falcon.CORSMiddleware(
 
 app = application = falcon.App()
 
+app.add_route('/', rootResource())
 app.add_route('/item', PostResource())
 app.add_route('/item/{itemId}/', ItemResource())
 app.add_route('/items', MultipleItemsResource())

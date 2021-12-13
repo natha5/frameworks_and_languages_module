@@ -2,7 +2,7 @@ DOCKER_IMAGE:=server
 
 
 run_local:
-	python3 -m http.server 8000
+	#python3 -m http.server 8000
 	python3 app.py
 
 test_local:
