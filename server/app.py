@@ -2,6 +2,8 @@ import falcon
 import json
 import datetime
 
+
+
 from wsgiref import simple_server
 from dataStore import *
 
@@ -41,11 +43,12 @@ class PostResource:
         #data = req.JSON
 
         #create new values that arent inputted by user
-        date_from = datetime.datetime.now()
-        date_to = datetime.datetime.now()
-        id = max(ITEMS.keys()) + 1
+        newDateFrom = datetime.datetime.now()
+        newDateTo = datetime.datetime.now()
+        newid = max(ITEMS.keys()) + 1
 
         ## check got the right fields
+        
         
 
         fields = set({'user_id', 'keywords', 'description', 'image', 'lat', 'lon'})
@@ -53,7 +56,21 @@ class PostResource:
         if(ITEMS.keys != fields):
             resp.status = falcon.HTTP_204
         else:
-            ITEMS[id] = req.JSON
+            ITEMS[newid] = {
+                "id" : newid,
+                "user_id" : req.user_id,
+                "keywords" : req.keywords,
+                "description" : req.description,
+                
+                "image" : req.image,
+                "lat" : req.lat,
+                "lon" : req.lon,
+                
+                
+                "date_from" : newDateFrom,
+                "date_to ": newDateTo
+            }
+
             
             ITEMS.add()
             
@@ -79,14 +96,18 @@ class rootResource:
 #        resp.status = falcon.HTTP_200
 #        resp.content_type = falcon.MEDIA_JSON
 
+app = application = falcon.App(cors_enable=True)
+
 
 #cors handling
 app = falcon.App(middleware=falcon.CORSMiddleware(
-    allow_origins='http://localhost:8001', allow_credentials='*'))
-    #allow_origins='https://8001-apricot-beaver-j6aztah6.ws-eu23.gitpod.io' , allow_credentials='*'))
+    allow_origins= '*', 
+    allow_credentials='*', 
+    expose_headers= 'content-type'))
 
 
-app = application = falcon.App()
+
+
 
 app.add_route('/', rootResource())
 app.add_route('/item', PostResource())
