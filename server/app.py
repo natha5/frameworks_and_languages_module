@@ -104,7 +104,8 @@ class HandleCORS(object):
         resp.set_header('Access-Control-Allow-Methods', 'POST')
         resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
         resp.set_header('Access-Control-Max-Age', 1728000)  # 20 days
-        resp.set_header('Access-Control-Content-Type', 'text/html')
+        resp.body = 'hi'
+        resp.content_type = "text/html"
         if req.method == 'OPTIONS':
             raise HTTPStatus(falcon.HTTP_204, body='\n')
 
