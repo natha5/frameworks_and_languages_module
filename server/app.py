@@ -3,7 +3,7 @@ import json
 import datetime
 
 
-
+from falcon.http_status import HTTPStatus
 from wsgiref import simple_server
 from dataStore import *
 
@@ -95,13 +95,20 @@ class OptionsResource:
         resp.content_type = falcon.MEDIA_JSON
 
 
-#cors handling
-app = falcon.App(cors_enable=True)
+#cors handling adapted from https://github.com/falconry/falcon/issues/1220
 
-app = falcon.App(middleware=falcon.CORSMiddleware(
-    allow_origins='*', 
-    allow_credentials='*',
-    expose_headers='None'))
+
+class HandleCORS(object):
+    def process_request(self, req, resp):
+        resp.set_header('Access-Control-Allow-Origin', '*')
+        resp.set_header('Access-Control-Allow-Methods', 'POST')
+        resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
+        resp.set_header('Access-Control-Max-Age', 1728000)  # 20 days
+        resp.set_header('Access-Control-Content-Type', 'text/html')
+        if req.method == 'OPTIONS':
+            raise HTTPStatus(falcon.HTTP_204, body='\n')
+
+app = falcon.API(middleware=[HandleCORS() ])
 
 
 

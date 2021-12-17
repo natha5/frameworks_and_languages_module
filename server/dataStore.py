@@ -2,6 +2,7 @@
 #Datastore dictionary copied from Allans example
 
 
+import random
 #ITEMS = {
 #
 #        "id": 1,
@@ -22,10 +23,12 @@ ITEMS = {
         "user_id": "user1234",
         "keywords": ["hammer", "nails", "tools"],
         "description": "A hammer and nails set",
-        "lat": 1,
-        "lon": 1,
+        "lat": (random.random() * (70*2)) - 70,
+        "lon": (random.random() * (180*2)) - 180,
         "date_from": "2021-11-22T08:22:39.067408",
         "date_to": "2021-11-22T08:22:39.067408",
+
+        
     }
 }
 
