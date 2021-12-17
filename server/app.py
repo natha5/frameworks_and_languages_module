@@ -27,10 +27,17 @@ class ItemResource:
 class MultipleItemsResource:
     def on_get(self, req, resp):
         """Handles GET request for multiple items"""
-        #if req.param("id"):
-        resp.media = json.dumps(ITEMS)
 
-        resp.status = falcon.HTTP_200
+        inputData = json.load(req.bounded_stream)
+        userid = inputData.userid
+
+        
+        if(ITEMS.values == userid):
+            resp.media = json.dumps(ITEMS)
+
+            resp.status = falcon.HTTP_200
+        else:
+            resp.status = falcon.HTTP_400
         resp.content_type = falcon.MEDIA_JSON
         pass
 
@@ -82,10 +89,6 @@ class rootResource:
     def on_get(self, resp, req):
         resp.status = falcon.HTTP_200
         resp.content_type = falcon.MEDIA_JSON
-
-
-
-
     
 
 class OptionsResource:
