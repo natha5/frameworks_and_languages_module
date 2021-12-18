@@ -57,11 +57,10 @@ class PostResource:
 
         ## check the correct fields have been filled
 
-        fields = set({'user_id', 'keywords', 'description', 'image', 'lat', 'lon', 'date_from', 'date_to'})
+        neededFields = set({'user_id', 'keywords', 'description', 'lat', 'lon'})
+        givenFields = set(inputData.keys())
 
-        if(ITEMS.keys != fields):
-            resp.status = falcon.HTTP_405
-        else:
+        if(givenFields.issubset(neededFields)):
             ITEMS[newId] = {
                 "id" : newId,
                 "user_id" : inputData.user_id,
@@ -78,9 +77,13 @@ class PostResource:
             ITEMS.add()
             
             resp.status = falcon.HTTP_201
-        
+            
+            
+            
+        else:
+            resp.status = falcon.HTTP_405
 
-        resp.content_type = falcon.MEDIA_JSON
+        resp.content_type = "application/json"
         #resp.media = {'id' : itemId, 'lat' : lat, 'lon' : lon, 'description' : description, 'keywords' : keywords}
 
         pass
