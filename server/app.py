@@ -61,22 +61,14 @@ class PostResource:
         givenFields = set(inputData.keys())
 
         if(givenFields.issubset(neededFields)):
-            ITEMS[newId] = {
-                "id" : newId,
-                "user_id" : inputData.user_id,
-                "keywords" : inputData.keywords,
-                "description" : inputData.description,
-                "image" : inputData.image,
-                "lat" : inputData.lat,
-                "lon" : inputData.lon,
-                "date_from" : newDateFrom,
-                "date_to ": newDateTo
-            }
+            inputData['dateFrom'] = newDateFrom.strftime
+            inputData['dateTo'] = newDateTo.strftime
 
-            
-            ITEMS.add()
-            
+            datastore.create_item(inputData)
+
             resp.status = falcon.HTTP_201
+            resp.media = json.dumps(inputData)
+            
             
             
             
@@ -84,9 +76,7 @@ class PostResource:
             resp.status = falcon.HTTP_405
 
         resp.content_type = "application/json"
-        #resp.media = {'id' : itemId, 'lat' : lat, 'lon' : lon, 'description' : description, 'keywords' : keywords}
 
-        pass
 
 class rootResource:
     def on_get(self, resp, req):
@@ -110,7 +100,7 @@ class HandleCORS(object):
         resp.set_header('Access-Control-Allow-Methods', 'POST')
         resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
         resp.set_header('Access-Control-Max-Age', 1728000)  # 20 days
-        resp.body = 'hi'
+        resp.body = 'hi allan'
         resp.content_type = "text/html"
         if req.method == 'OPTIONS':
             raise HTTPStatus(falcon.HTTP_204, body='\n')
