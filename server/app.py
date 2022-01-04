@@ -53,8 +53,14 @@ class MultipleItemsResource:
     def on_get(self, req, resp):
         """Handles GET request for multiple items"""
 
+        fullFetchedData = []
+
+        for i in range (len(ITEMS)):
+            fullFetchedData.append(ITEMS[i])
+
         resp.status = falcon.HTTP_200
         resp.content_type = "application/json"
+        resp.media = fullFetchedData
 
 
 class PostResource:
@@ -82,7 +88,7 @@ class PostResource:
 
             datastore.create_item(inputData)
             
-            resp.media = inputData[id]
+            resp.media = {'id' : newId}
             
             resp.content_type = "application/json"
             resp.status = falcon.HTTP_201
@@ -94,7 +100,8 @@ class PostResource:
 class rootResource:
     def on_get(self, resp, req):
         resp.status = falcon.HTTP_200
-        resp.content_type = falcon.MEDIA_JSON
+        resp.content_type = "text/html"
+        resp.text = "hello"
     
 
 class OptionsResource:
@@ -108,14 +115,15 @@ class OptionsResource:
 
 
 class HandleCORS(object):
-    def process_request(self, req, resp):
+    def process_resource(self, req, resp, resource, req_succeeded):
         resp.set_header('Access-Control-Allow-Origin', '*')
         resp.set_header('Access-Control-Allow-Methods', 'POST')
         resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
-        resp.text = 'hi allan'
-        resp.content_type = "text/html"
+        
         if req.method == 'OPTIONS':
             raise HTTPStatus(falcon.HTTP_204, text='\n')
+
+    
 
 app = falcon.API(middleware=[HandleCORS()])
 
