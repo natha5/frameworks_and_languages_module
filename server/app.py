@@ -13,30 +13,30 @@ class ItemResource:
     def on_get(self, req, resp, itemId):
         """Handles GET request for single item"""
         
+        fixedId = int(itemId) - 1
+        
         fetchedItem = {}
-
-        fetchedItem = datastore.get_item(itemId)
+        fetchedItem = datastore.get_item(fixedId)
 
         if not fetchedItem:
             resp.status = falcon.HTTP_404
         else:
             resp.status = falcon.HTTP_200
-            resp.media = fetchedItem
+            resp.media = {"id" : fetchedItem.get('id') + 1}
         resp.content_type = "application/json"
 
     def on_delete(self, req, resp, itemId):
         """Handles DELETE requests"""
         
-        item = {}
-        item = datastore.get_item(itemId)
+        fixedId = int(itemId) - 1
+
+        item = datastore.get_item(fixedId)
 
         if not item:
             resp.status = falcon.HTTP_404
         else:
-            datastore.delete_item(itemId)
+            datastore.delete_item(fixedId)
             resp.status = falcon.HTTP_201
-        
-
         
         resp.content_type = "application/json"
 
@@ -64,7 +64,7 @@ class PostResource:
         newDateFrom = datetime.datetime.now().isoformat
         newDateTo = datetime.datetime.now().isoformat
 
-        newId = max(ITEMS.keys()) + 1
+        
 
         ## check the correct fields have been filled
 
@@ -74,9 +74,10 @@ class PostResource:
         if(givenFields.issubset(neededFields)):
             inputData['dateFrom'] = newDateFrom
             inputData['dateTo'] = newDateTo
-            inputData['id'] = newId
-
+            
             datastore.create_item(inputData)
+            
+            newId = max(ITEMS.keys()) + 1
             
             resp.media = {'id' : newId}
             
