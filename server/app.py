@@ -27,7 +27,7 @@ class ItemResource:
     def on_delete(self, req, resp, itemId):
         """Handles DELETE requests"""
         
-
+        item = {}
         item = datastore.get_item(itemId)
 
         if not item:
