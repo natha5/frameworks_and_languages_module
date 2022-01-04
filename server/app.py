@@ -7,9 +7,22 @@ from falcon.http_status import HTTPStatus
 from wsgiref import simple_server
 from dataStore import *
 
-
+class rootResource:
+    def on_get(self, resp, req):
+        resp.status = falcon.HTTP_200
+        resp.content_type = "text/html"
+        resp.text = "Freecycle"
+        print("GET /","-", resp.status)
+    
+    def on_options(self, req, resp):
+        resp.text = "hello"
+        resp.status = falcon.HTTP_204
+        resp.content_type = "text/html"
+        resp.set_header = ('Access-Control-Allow-Methods', 'POST')
+        print("OPTIONS /", "-", resp.status)
 
 class ItemResource:
+    rootResource()
     def on_get(self, req, resp, itemId):
         """Handles GET request for single item"""
         
@@ -44,6 +57,7 @@ class ItemResource:
 
 
 class MultipleItemsResource:
+    rootResource()
     def on_get(self, req, resp):
         """Handles GET request for multiple items"""
 
@@ -64,6 +78,7 @@ class MultipleItemsResource:
 
 
 class PostResource:
+    rootResource()
     def on_post(self, req, resp):
         """Handles POST requests"""
         inputData ={}
@@ -88,46 +103,31 @@ class PostResource:
             datastore.create_item(inputData)
             
             newId = max(ITEMS.keys()) + 1
-            
-            
 
             resp.media = {'id' : newId}
             
             resp.content_type = "application/json"
             resp.status = falcon.HTTP_201
 
-
-            
         else:
             resp.status = falcon.HTTP_405
 
         print("POST /item","-", resp.status)
 
 
-class rootResource:
-    def on_get(self, resp, req):
-        resp.status = falcon.HTTP_200
-        resp.content_type = "text/html"
-        resp.text = "hello"
-        print("GET /","-", resp.status)
-    
-    def on_options(self, req, resp):
-        resp.text = "hello"
-        resp.status = falcon.HTTP_204
-        resp.content_type = "text/html"
-        resp.methods = 'POST, GET, DELETE'
-        print("OPTIONS /", "-", resp.status)
 
 
-#cors handling adapted from https://github.com/falconry/falcon/issues/1220
+#https://github.com/falconry/falcon/issues/1220
+class HandleCORS(object):
+    def process_request(self, req, resp):
+        resp.set_header('Access-Control-Allow-Origin', '*')
+        resp.set_header('Access-Control-Allow-Methods','POST')
+        resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
 
 
+app = falcon.App(middleware=[HandleCORS() ])
 
-    
-app = falcon.App(cors_enable=True)
-app = falcon.App(middleware=falcon.CORSMiddleware(
-    allow_origins='*', allow_credentials='*'
-))
+
 
 
 app.add_route('/', rootResource())
