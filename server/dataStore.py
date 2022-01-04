@@ -18,8 +18,8 @@ import random
 
 
 ITEMS = {
-    1: {
-        "id": 1,
+    0: {
+        "id": 0,
         "user_id": "user1234",
         "keywords": ["hammer", "nails", "tools"],
         "description": "A hammer and nails set",

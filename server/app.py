@@ -10,49 +10,64 @@ from dataStore import *
 
 
 class ItemResource:
-    def on_get(self, req, resp, itemId):
+    def on_get(self, req, resp):
         """Handles GET request for single item"""
+        inputID = req.get_media()
+
+        fetchedItem = datastore.get_item(inputID)
+
+        dataStoreKeys = set(ITEMS.keys)
+        idSet = set(inputID)
+
+        if(id.issubset(dataStoreKeys)):
+            if not fetchedItem:
+                #item not found
+                resp.status = falcon.http_404
+            else:
+                resp.media = fetchedItem
+                resp.status = falcon.HTTP_200
+        else:
+            #invalid id supplied
+            resp.status = falcon.HTTP_400
+        resp.content_type = "application/json"
         
-        resp.media = json.dumps(ITEMS)
-        
-        resp.status = falcon.HTTP_200
-        resp.content_type = falcon.MEDIA_JSON
-        pass
-    def on_delete(self, req, resp, itemId):
+
+    def on_delete(self, req, resp):
         """Handles DELETE requests"""
-        resp.status = falcon.HTTP_200
-        resp.content_type = falcon.MEDIA_JSON
+        idToDelete = req.get_media()
+
+        inputID = set(idToDelete)
+        dataStoreKeys = set(ITEMS.keys)
+        if(dataStoreKeys.issubset(inputID)):
+            datastore.delete_item(idToDelete)
+            resp.status = falcon.HTTP_200
+        else:
+            resp.status = falcon.HTTP_404
+        
+
+        
+        resp.content_type = "application/json"
 
 
 class MultipleItemsResource:
     def on_get(self, req, resp):
         """Handles GET request for multiple items"""
 
-        inputData = json.load(req.bounded_stream)
-        userid = inputData.userid
-
-        
-        if(ITEMS.values == userid):
-            resp.media = json.dumps(ITEMS)
-
-            resp.status = falcon.HTTP_200
-        else:
-            resp.status = falcon.HTTP_400
-        resp.content_type = falcon.MEDIA_JSON
-        pass
-
+        resp.status = falcon.HTTP_200
+        resp.content_type = "application/json"
 
 
 class PostResource:
     def on_post(self, req, resp):
         """Handles POST requests"""
-        inputData = json.load(req.bounded_stream)
+        inputData ={}
+        inputData = req.get_media()
         
-        #data = req.JSON
 
         #create new values that arent inputted by user
-        newDateFrom = datetime.datetime.now()
-        newDateTo = datetime.datetime.now()
+        newDateFrom = datetime.datetime.now().isoformat
+        newDateTo = datetime.datetime.now().isoformat
+
         newId = max(ITEMS.keys()) + 1
 
         ## check the correct fields have been filled
@@ -61,21 +76,19 @@ class PostResource:
         givenFields = set(inputData.keys())
 
         if(givenFields.issubset(neededFields)):
-            inputData['dateFrom'] = newDateFrom.strftime
-            inputData['dateTo'] = newDateTo.strftime
+            inputData['dateFrom'] = newDateFrom
+            inputData['dateTo'] = newDateTo
+            inputData['id'] = newId
 
             datastore.create_item(inputData)
-
+            
+            resp.media = inputData[id]
+            
+            resp.content_type = "application/json"
             resp.status = falcon.HTTP_201
-            resp.media = json.dumps(inputData)
-            
-            
-            
             
         else:
             resp.status = falcon.HTTP_405
-
-        resp.content_type = "application/json"
 
 
 class rootResource:
@@ -99,16 +112,12 @@ class HandleCORS(object):
         resp.set_header('Access-Control-Allow-Origin', '*')
         resp.set_header('Access-Control-Allow-Methods', 'POST')
         resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
-        resp.set_header('Access-Control-Max-Age', 1728000)  # 20 days
-        resp.body = 'hi allan'
+        resp.text = 'hi allan'
         resp.content_type = "text/html"
         if req.method == 'OPTIONS':
-            raise HTTPStatus(falcon.HTTP_204, body='\n')
+            raise HTTPStatus(falcon.HTTP_204, text='\n')
 
-app = falcon.API(middleware=[HandleCORS() ])
-
-
-
+app = falcon.API(middleware=[HandleCORS()])
 
 
 app.add_route('/', rootResource())
