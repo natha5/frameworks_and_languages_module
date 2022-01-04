@@ -24,6 +24,7 @@ class ItemResource:
             resp.status = falcon.HTTP_200
             resp.media = {"id" : fetchedItem.get('id') + 1}
         resp.content_type = "application/json"
+        print("GET /item/"+ str(itemId), "-", resp.status)
 
     def on_delete(self, req, resp, itemId):
         """Handles DELETE requests"""
@@ -39,6 +40,7 @@ class ItemResource:
             resp.status = falcon.HTTP_201
         
         resp.content_type = "application/json"
+        print("DELETE /item/" + str(itemId), "-", resp.status)
 
 
 class MultipleItemsResource:
@@ -57,6 +59,8 @@ class MultipleItemsResource:
         resp.status = falcon.HTTP_200
         resp.content_type = "application/json"
         resp.media = listOfAllItems
+
+        print("GET /items", "-",)
 
 
 class PostResource:
@@ -85,13 +89,20 @@ class PostResource:
             
             newId = max(ITEMS.keys()) + 1
             
-            resp.media = {'id' : newId}
+            resp.media = {
+                'id' : newId,
+     
+                }
             
             resp.content_type = "application/json"
             resp.status = falcon.HTTP_201
+
+
             
         else:
             resp.status = falcon.HTTP_405
+
+        print("POST /item","-", resp.status)
 
 
 class rootResource:
@@ -99,6 +110,7 @@ class rootResource:
         resp.status = falcon.HTTP_200
         resp.content_type = "text/html"
         resp.text = "hello"
+        print("GET /","-", resp.status)
     
 
 class OptionsResource:
