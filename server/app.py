@@ -45,12 +45,18 @@ class MultipleItemsResource:
     def on_get(self, req, resp):
         """Handles GET request for multiple items"""
 
-        fullFetchedData = []
+        noOfItemsinStore = max(ITEMS.keys())
+
+        listOfAllItems = []
+
+        for i in range (noOfItemsinStore):
+            listOfAllItems.append(datastore.get_item(i))
+
 
         
         resp.status = falcon.HTTP_200
         resp.content_type = "application/json"
-        resp.media = fullFetchedData
+        resp.media = listOfAllItems
 
 
 class PostResource:
@@ -110,13 +116,15 @@ class HandleCORS(object):
         resp.set_header('Access-Control-Allow-Origin', '*')
         resp.set_header('Access-Control-Allow-Methods', 'POST, DELETE, GET')
         resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
+        resp.content_type = 'application/json, text/html'
+        
         
         if req.method == 'OPTIONS':
             raise HTTPStatus(falcon.HTTP_204, text='\n')
 
     
 
-app = falcon.API(middleware=[HandleCORS()])
+app = falcon.App(middleware=[HandleCORS()])
 
 
 app.add_route('/', rootResource())
