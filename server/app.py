@@ -37,7 +37,7 @@ class ItemResource:
             resp.status = falcon.HTTP_404
         else:
             datastore.delete_item(fixedId)
-            resp.status = falcon.HTTP_201
+            resp.status = falcon.HTTP_201 #Spec asks for a 201 code, despite 201 meaning created
         
         resp.content_type = "application/json"
         print("DELETE /item/" + str(itemId), "-", resp.status)
@@ -49,16 +49,16 @@ class MultipleItemsResource:
 
         noOfItemsinStore = max(ITEMS.keys())
 
-        listOfAllItems = []
+        dictOfAllItems = {}
 
         for i in range (noOfItemsinStore):
-            listOfAllItems.append(datastore.get_item(i))
+            dictOfAllItems[i] = datastore.get_item(i)
 
 
         
         resp.status = falcon.HTTP_200
         resp.content_type = "application/json"
-        resp.media = listOfAllItems
+        resp.media = dictOfAllItems
 
         print("GET /items", "-",)
 
@@ -82,17 +82,16 @@ class PostResource:
         givenFields = set(inputData.keys())
 
         if(givenFields.issubset(neededFields)):
-            inputData['dateFrom'] = newDateFrom
-            inputData['dateTo'] = newDateTo
+            inputData['date_from'] = newDateFrom
+            inputData['date_to'] = newDateTo
             
             datastore.create_item(inputData)
             
             newId = max(ITEMS.keys()) + 1
             
-            resp.media = {
-                'id' : newId,
-     
-                }
+            
+
+            resp.media = {'id' : newId}
             
             resp.content_type = "application/json"
             resp.status = falcon.HTTP_201
@@ -112,31 +111,23 @@ class rootResource:
         resp.text = "hello"
         print("GET /","-", resp.status)
     
-
-class OptionsResource:
     def on_options(self, req, resp):
-
+        resp.text = "hello"
         resp.status = falcon.HTTP_204
-        resp.content_type = falcon.MEDIA_JSON
+        resp.content_type = "text/html"
+        resp.methods = 'POST, GET, DELETE'
+        print("OPTIONS /", "-", resp.status)
 
 
 #cors handling adapted from https://github.com/falconry/falcon/issues/1220
 
 
-class HandleCORS(object):
-    def process_resource(self, req, resp, resource, req_succeeded):
-        resp.set_header('Access-Control-Allow-Origin', '*')
-        resp.set_header('Access-Control-Allow-Methods', 'POST, DELETE, GET')
-        resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
-        resp.content_type = 'application/json, text/html'
-        
-        
-        if req.method == 'OPTIONS':
-            raise HTTPStatus(falcon.HTTP_204, text='\n')
 
     
-
-app = falcon.App(middleware=[HandleCORS()])
+app = falcon.App(cors_enable=True)
+app = falcon.App(middleware=falcon.CORSMiddleware(
+    allow_origins='*', allow_credentials='*'
+))
 
 
 app.add_route('/', rootResource())
