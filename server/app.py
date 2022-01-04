@@ -10,39 +10,31 @@ from dataStore import *
 
 
 class ItemResource:
-    def on_get(self, req, resp):
+    def on_get(self, req, resp, itemId):
         """Handles GET request for single item"""
-        inputID = req.get_media()
+        
+        fetchedItem = {}
 
-        fetchedItem = datastore.get_item(inputID)
+        fetchedItem = datastore.get_item(itemId)
 
-        dataStoreKeys = set(ITEMS.keys)
-        idSet = set(inputID)
-
-        if(id.issubset(dataStoreKeys)):
-            if not fetchedItem:
-                #item not found
-                resp.status = falcon.http_404
-            else:
-                resp.media = fetchedItem
-                resp.status = falcon.HTTP_200
+        if not fetchedItem:
+            resp.status = falcon.HTTP_404
         else:
-            #invalid id supplied
-            resp.status = falcon.HTTP_400
+            resp.status = falcon.HTTP_200
+            resp.media = fetchedItem
         resp.content_type = "application/json"
+
+    def on_delete(self, req, resp, itemId):
+        """Handles DELETE requests"""
         
 
-    def on_delete(self, req, resp):
-        """Handles DELETE requests"""
-        idToDelete = req.get_media()
+        item = datastore.get_item(itemId)
 
-        inputID = set(idToDelete)
-        dataStoreKeys = set(ITEMS.keys)
-        if(dataStoreKeys.issubset(inputID)):
-            datastore.delete_item(idToDelete)
-            resp.status = falcon.HTTP_200
-        else:
+        if not item:
             resp.status = falcon.HTTP_404
+        else:
+            datastore.delete_item(itemId)
+            resp.status = falcon.HTTP_201
         
 
         
@@ -55,9 +47,7 @@ class MultipleItemsResource:
 
         fullFetchedData = []
 
-        for i in range (len(ITEMS)):
-            fullFetchedData.append(ITEMS[i])
-
+        
         resp.status = falcon.HTTP_200
         resp.content_type = "application/json"
         resp.media = fullFetchedData
@@ -117,7 +107,7 @@ class OptionsResource:
 class HandleCORS(object):
     def process_resource(self, req, resp, resource, req_succeeded):
         resp.set_header('Access-Control-Allow-Origin', '*')
-        resp.set_header('Access-Control-Allow-Methods', 'POST')
+        resp.set_header('Access-Control-Allow-Methods', 'POST, DELETE, GET')
         resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
         
         if req.method == 'OPTIONS':
@@ -130,7 +120,7 @@ app = falcon.API(middleware=[HandleCORS()])
 
 app.add_route('/', rootResource())
 app.add_route('/item', PostResource())
-app.add_route('/item/{itemId}/', ItemResource())
+app.add_route('/item/{itemId}', ItemResource())
 app.add_route('/items', MultipleItemsResource())
 
 
