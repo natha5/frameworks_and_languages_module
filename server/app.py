@@ -8,21 +8,22 @@ from wsgiref import simple_server
 from dataStore import *
 
 class rootResource:
+
     def on_get(self, resp, req):
         resp.status = falcon.HTTP_200
-        resp.content_type = "text/html"
-        resp.text = "Freecycle"
+        resp.content_type = falcon.MEDIA_HTML
+        resp.body = "Freecycle"
         print("GET /","-", resp.status)
     
     def on_options(self, req, resp):
-        resp.text = "hello"
+        resp.body = "hello"
         resp.status = falcon.HTTP_204
         resp.content_type = "text/html"
         resp.set_header = ('Access-Control-Allow-Methods', 'POST')
         print("OPTIONS /", "-", resp.status)
 
 class ItemResource:
-    rootResource()
+    
     def on_get(self, req, resp, itemId):
         """Handles GET request for single item"""
         
@@ -57,7 +58,7 @@ class ItemResource:
 
 
 class MultipleItemsResource:
-    rootResource()
+    
     def on_get(self, req, resp):
         """Handles GET request for multiple items"""
 
@@ -78,7 +79,7 @@ class MultipleItemsResource:
 
 
 class PostResource:
-    rootResource()
+    
     def on_post(self, req, resp):
         """Handles POST requests"""
         inputData ={}
@@ -88,8 +89,6 @@ class PostResource:
         #create new values that arent inputted by user
         newDateFrom = datetime.datetime.now().isoformat
         newDateTo = datetime.datetime.now().isoformat
-
-        
 
         ## check the correct fields have been filled
 
@@ -105,32 +104,32 @@ class PostResource:
             newId = max(ITEMS.keys()) + 1
 
             resp.media = {'id' : newId}
-            
-            resp.content_type = "application/json"
             resp.status = falcon.HTTP_201
 
         else:
             resp.status = falcon.HTTP_405
-
+        resp.content_type = "application/json"
         print("POST /item","-", resp.status)
 
 
 
 
-#https://github.com/falconry/falcon/issues/1220
+#Adapted from : https://github.com/falconry/falcon/issues/1220
 class HandleCORS(object):
     def process_request(self, req, resp):
+        """Process the request before routing it."""
         resp.set_header('Access-Control-Allow-Origin', '*')
         resp.set_header('Access-Control-Allow-Methods','POST')
         resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
-
+        resp.content_type = "text/html"
 
 app = falcon.App(middleware=[HandleCORS() ])
 
 
+#Routing
 
+app.add_route("/", rootResource())
 
-app.add_route('/', rootResource())
 app.add_route('/item', PostResource())
 app.add_route('/item/{itemId}', ItemResource())
 app.add_route('/items', MultipleItemsResource())
