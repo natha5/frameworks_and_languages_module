@@ -13,6 +13,7 @@
 
     <body>
         <h1>Freecycle</h1>
+        <div id="main" class="container">
         <div id="enter data">
             <h2>Add new data</h2>
             <div id="enter keywords">
@@ -52,34 +53,28 @@
             <button type="button">Confirm delete</button>
         </div>
         
-        
+    
         <script type="module">
             
             
-            var app  = {
+            const app  = Vue.createApp ({
                 
-                data: {
-                    
-                        keyword: '',
-                        keywords: [],
-                    },
-
-                methods: {
-                    addKeyword: function () {
-                        this.keywords.push( {
-                            id: this.keywords.length + 1,
-                            name: this.newKeyword
-                        } );
-                        this.newKeyword = '';
-                        
-                        
-                    },
-                    removeKeyword: function ( item ) {
-                        this.keywords = this.keywords.filter( ( newKeyword ) => newKeyword.name !== keyword.name );
-                    },
+                data() {
+                    return {
+                        userId: '',
+                        description: '',
+                        image:'',
+                        lat:'',
+                        lon:'',
+                        keywords: '',
+                    }
                 },
-            };
-            Vue.createApp(app).mount("#main")
+
+                
+            });
+            app.mount("#main")
+        
         </script>
+        </div>
     </body>
 </html>
