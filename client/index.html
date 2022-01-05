@@ -16,30 +16,21 @@
         <div id="main" class="container">
         <div id="enter data">
             <h2>Add new data</h2>
-            <div id="enter keywords">
-                <h3>Keywords</h3>
-                <input v-model="newKeyword" name="keywords" type="text" placeholder="enter keyword" @keyup.enter="addKeyword">
-                <button @click="addKeyword" :disabled="newKeyword.length === 0" type="submit">Add keyword</button>
-                
-                <h4>Existing keywords:</h4>
-                <ul class="list" v-for="keyword in keywords">
-                    <li class="list-keyword" >
-                        {{keyword.name}}<button class="list-item-delete" @click="removeKeyword(item)">X</div>
-                   
-                </ul>
-                    
-            </div>
-
+            
+            <h3>Username</h3>
+            <input name="username" v-model="usernameInput" type="text" placeholder="enter username">
+            <h3>Keywords</h3>  
+            <input name="keywords" v-model="keywordInput" type="text" placeholder="enter keyword" >
             <h3>Description</h3>
-            <input name="description" type="text" placeholder="enter description">
+            <input name="description" v-model="descriptionInput" type="text" placeholder="enter description">
             <h3>ImageURL</h3>
-            <input name="ImageURL" type="text" placeholder="enter imageURL">
+            <input name="ImageURL" v-model="imageInput" type="text" placeholder="enter imageURL">
             <h3>Latitude</h3>
-            <input name="latitude" type="text" placeholder="enter latitude">
+            <input name="latitude" v-model="latInput" type="text" placeholder="enter latitude">
             <h3>Longitude</h3>
-            <input name="longitude" type="text" placeholder="enter longitude">
+            <input name="longitude" v-model="lonInput" type="text" placeholder="enter longitude">
 
-            <button type="button">Enter data</button>
+            <button type="button" v-on:click="createNewData()">Enter data</button>
 
         </div>
 
@@ -54,21 +45,49 @@
         </div>
         
     
-        <script type="module">
-            
-            
+        <script>
+            const urlParameters = new 
+            const serverUrl = ()
             const app  = Vue.createApp ({
                 
                 data() {
                     return {
                         userId: '',
                         description: '',
-                        image:'',
-                        lat:'',
-                        lon:'',
+                        image: '',
+                        lat: '',
+                        lon: '',
                         keywords: '',
                     }
                 },
+
+                methods: {
+                    getData(){
+                            
+                    },
+
+                    async createNewData(){  //async so it can happen at any time, not just initally
+                        //get values from text boxes
+                        var keywordArray = this.keywords.split(',')
+                        keywordArray = keywordArray.map(s => s.trim())
+                        var newData = {
+                            usernameInput : this.userId,
+                            descriptionInput : this.description,
+                            imageInput : this.image,
+                            latInput : this.lat,
+                            lonInput : this.lon,
+                            keywords : keywordArray
+                        }
+                        
+                        //clear textboxes for next input
+                        this.usernameInput = "";
+                        this.descriptionInput = "";
+                        this.imageInput = "";
+                        this.latInput = "";
+                        this.lonInput = "";
+                        this.keywordInput = "";
+                    }
+                }
 
                 
             });
