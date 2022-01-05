@@ -1,6 +1,6 @@
 FROM python:alpine
 
-WORKDIR /vue/
+WORKDIR /client/
 
 EXPOSE 8001
 
