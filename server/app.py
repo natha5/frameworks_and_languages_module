@@ -7,11 +7,11 @@ from falcon.http_status import HTTPStatus
 from wsgiref import simple_server
 from dataStore import *
 
-class rootResource:
+class RootResource:
 
     def on_get(self, resp, req):
         resp.status = falcon.HTTP_200
-        resp.content_type = falcon.MEDIA_HTML
+        resp.content_type = "text/html"
         resp.body = "Freecycle"
         print("GET /","-", resp.status)
     
@@ -128,8 +128,7 @@ app = falcon.App(middleware=[HandleCORS() ])
 
 #Routing
 
-app.add_route("/", rootResource())
-
+app.add_route("/", RootResource())
 app.add_route('/item', PostResource())
 app.add_route('/item/{itemId}', ItemResource())
 app.add_route('/items', MultipleItemsResource())
