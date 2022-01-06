@@ -36,6 +36,11 @@
 
         <div id="Get data">
             <h2>Get data</h2>
+
+
+            <h3>Get data by id</h3>
+            <input name="idSearch" v-model="searchIdInput" type="text" placeholder="enter id">
+            <button type="button" v-on:click="getData()">Get data</button>
         </div>
 
         <div id="Delete data">
@@ -46,8 +51,9 @@
         
     
         <script>
-            const urlParameters = new 
-            const serverUrl = ()
+            const url = "http://localhost:8000"
+            
+            
             const app  = Vue.createApp ({
                 
                 data() {
@@ -58,11 +64,34 @@
                         lat: '',
                         lon: '',
                         keywords: '',
+
+                        idToSearch: '',
                     }
                 },
 
                 methods: {
-                    getData(){
+                    async getData(){
+
+                        var idToGet = {
+                            searchIdInput : this.idToSearch
+                        }
+
+                        //Fetching adapted from https://www.geeksforgeeks.org/javascript-fetch-method/
+                        const getReqURL = "http://localhost:8000/item{" + idToSearch + "}"
+                        let options = {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 
+                                'application/json;charset=utf-8'
+                            },
+                        }
+                        let fetchResponse = fetch(getReqURL, options)
+                        fetchResponse.then(res =>
+                            res.json()).then(d => {
+                            console.log(d)
+                        })
+
+
                             
                     },
 
