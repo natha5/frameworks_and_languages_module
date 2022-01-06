@@ -1,5 +1,19 @@
 Client
 
-Hyperapp is the old one I tried making
-I am now working on the vue one.
+Running instructions:
+
+Run through container:
+
+cd to client folder
+make build
+make run
+
+Ctrl + c to exit
+
+Running locally:
+
+cd to client folder
+python3 -m http.server
+
+Ctrl + c to exit
 ======
