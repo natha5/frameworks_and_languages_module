@@ -14,115 +14,120 @@
     <body>
         <h1>Freecycle</h1>
         <div id="main" class="container">
-        <div id="enter data">
-            <h2>Add new data</h2>
+            <form id="form">
+                <div id="enter data">
+                    <h2>Add new data</h2>
             
-            <h3>Username</h3>
-            <input name="username" v-model="usernameInput" type="text" placeholder="enter username">
-            <h3>Keywords</h3>  
-            <input name="keywords" v-model="keywordInput" type="text" placeholder="enter keyword" >
-            <h3>Description</h3>
-            <input name="description" v-model="descriptionInput" type="text" placeholder="enter description">
-            <h3>ImageURL</h3>
-            <input name="ImageURL" v-model="imageInput" type="text" placeholder="enter imageURL">
-            <h3>Latitude</h3>
-            <input name="latitude" v-model="latInput" type="text" placeholder="enter latitude">
-            <h3>Longitude</h3>
-            <input name="longitude" v-model="lonInput" type="text" placeholder="enter longitude">
+                    <h3>Username</h3>
+                    <input name="user_id" v-model="usernameInput" type="text" placeholder="enter username">
+                    <h3>Keywords</h3>  
+                    <input name="keywords" v-model="keywordInput" type="text" placeholder="enter keyword" >
+                    <h3>Description</h3>
+                    <input name="description" v-model="descriptionInput" type="text" placeholder="enter description">
+                    <h3>ImageURL</h3>
+                    <input name="image" v-model="imageInput" type="text" placeholder="enter imageURL">
+                    <h3>Latitude</h3>
+                    <input name="lat" v-model="latInput" type="text" placeholder="enter latitude">
+                    <h3>Longitude</h3>
+                    <input name="lon" v-model="lonInput" type="text" placeholder="enter longitude">
 
-            <button type="button" v-on:click="createNewData()">Enter data</button>
+                    <button type="submit" v-on:click="createNewData()" data-action="create_item" visible>Enter data</button>
 
-        </div>
+                </div>
+            </form>
+            <div id="Get data">
+                <h2>Get data</h2>
 
-        <div id="Get data">
-            <h2>Get data</h2>
 
+                <h3>Get data by id</h3>
+                <input name="idSearch" v-model="searchIdInput" type="text" placeholder="enter id">
+                <button type="button" v-on:click="getData()">Get data</button>
 
-            <h3>Get data by id</h3>
-            <input name="idSearch" v-model="searchIdInput" type="text" placeholder="enter id">
-            <button type="button" v-on:click="getData()">Get data</button>
-        </div>
+                <ul v-if="items">
 
-        <div id="Delete data">
-            <h2>Delete data</h2>
-            <input name="delete input" type="text" placeholder="enter id of data to delete">
-            <button type="button">Confirm delete</button>
-        </div>
+                </ul>
+            </div>
+
+            <div id="Delete data">
+                <h2>Delete data</h2>
+                <input name="delete input" type="text" placeholder="enter id of data to delete">
+                <button type="button">Confirm delete</button>
+            </div>
         
     
-        <script>
-            const url = "http://localhost:8000"
+            <script>
+                const url = "http://localhost:8000"
             
             
-            const app  = Vue.createApp ({
+                const app  = Vue.createApp ({
                 
-                data() {
-                    return {
-                        userId: '',
-                        description: '',
-                        image: '',
-                        lat: '',
-                        lon: '',
-                        keywords: '',
+                    data() {
+                        return {
+                            userId: '',
+                            description: '',
+                            image: '',
+                            lat: '',
+                            lon: '',
+                            keywords: '',
 
-                        idToSearch: '',
-                    }
-                },
-
-                methods: {
-                    async getData(){
-
-                        var idToGet = {
-                            searchIdInput : this.idToSearch
+                            idToSearch: '',
                         }
+                    },
 
-                        //Fetching adapted from https://www.geeksforgeeks.org/javascript-fetch-method/
-                        const getReqURL = "http://localhost:8000/item{" + idToSearch + "}"
-                        let options = {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 
-                                'application/json;charset=utf-8'
-                            },
-                        }
-                        let fetchResponse = fetch(getReqURL, options)
-                        fetchResponse.then(res =>
-                            res.json()).then(d => {
-                            console.log(d)
-                        })
+                    methods: {
+                        async getData(){
+
+                            var idToGet = {
+                                searchIdInput : this.idToSearch
+                            }
+
+                            //Fetching adapted from https://www.geeksforgeeks.org/javascript-fetch-method/
+                            const getReqURL = "http://localhost:8000/item{" + idToSearch + "}"
+                            let options = {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 
+                                    'application/json;charset=utf-8'
+                                },body: JSON.stringify(data)
+                            }
+                            let fetchResponse = fetch(getReqURL, options)
+                            fetchResponse.then(res =>
+                                res.json()).then(d => {
+                                console.log(d)
+                            })
 
 
                             
-                    },
+                        },
 
-                    async createNewData(){  //async so it can happen at any time, not just initally
-                        //get values from text boxes
-                        var keywordArray = this.keywords.split(',')
-                        keywordArray = keywordArray.map(s => s.trim())
-                        var newData = {
-                            usernameInput : this.userId,
-                            descriptionInput : this.description,
-                            imageInput : this.image,
-                            latInput : this.lat,
-                            lonInput : this.lon,
-                            keywords : keywordArray
-                        }
+                        async createNewData(){  //async so it can happen at any time, not just initally
+                            //get values from text boxes
+                            var keywordArray = this.keywords.split(',')
+                            keywordArray = keywordArray.map(s => s.trim())
+                            var newData = {
+                                usernameInput : this.userId,
+                                descriptionInput : this.description,
+                                imageInput : this.image,
+                                latInput : this.lat,
+                                lonInput : this.lon,
+                                keywords : keywordArray
+                            }
                         
-                        //clear textboxes for next input
-                        this.usernameInput = "";
-                        this.descriptionInput = "";
-                        this.imageInput = "";
-                        this.latInput = "";
-                        this.lonInput = "";
-                        this.keywordInput = "";
+                            //clear textboxes for next input
+                            this.usernameInput = "";
+                            this.descriptionInput = "";
+                            this.imageInput = "";
+                            this.latInput = "";
+                            this.lonInput = "";
+                            this.keywordInput = "";
+                        }
                     }
-                }
 
                 
-            });
-            app.mount("#main")
+                });
+                app.mount("#main")
         
-        </script>
+            </script>
         </div>
     </body>
 </html>
