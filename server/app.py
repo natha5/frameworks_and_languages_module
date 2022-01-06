@@ -9,14 +9,16 @@ from dataStore import *
 
 class RootResource:
 
-    def on_get(self, resp, req):
-        resp.status = falcon.HTTP_200
+    def on_get(self, req, resp):
+        resp.text = "Freecycle"
         resp.content_type = "text/html"
-        resp.body = "Freecycle"
+        resp.status = falcon.HTTP_200
+        
+        
         print("GET /","-", resp.status)
     
     def on_options(self, req, resp):
-        resp.body = "hello"
+        resp.text = "hello"
         resp.status = falcon.HTTP_204
         resp.content_type = "text/html"
         resp.set_header = ('Access-Control-Allow-Methods', 'POST')
@@ -121,7 +123,7 @@ class HandleCORS(object):
         resp.set_header('Access-Control-Allow-Origin', '*')
         resp.set_header('Access-Control-Allow-Methods','POST')
         resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
-        resp.content_type = "text/html"
+        
 
 app = falcon.App(middleware=[HandleCORS() ])
 
