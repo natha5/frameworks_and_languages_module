@@ -7,8 +7,9 @@ from falcon.http_status import HTTPStatus
 from wsgiref import simple_server
 from dataStore import *
 
-class RootResource:
 
+
+class RootResource:
     def on_get(self, req, resp):
         resp.text = "Freecycle"
         resp.content_type = "text/html"
@@ -24,6 +25,7 @@ class RootResource:
         resp.set_header = ('Access-Control-Allow-Methods', 'POST')
         print("OPTIONS /", "-", resp.status)
 
+
 class ItemResource:
     
     def on_get(self, req, resp, itemId):
@@ -38,7 +40,16 @@ class ItemResource:
             resp.status = falcon.HTTP_404
         else:
             resp.status = falcon.HTTP_200
-            resp.media = {"id" : fetchedItem.get('id') + 1}
+            resp.media = {
+                "id" : fetchedItem.get('id') + 1,
+                "user_id" : fetchedItem.get('user_id'),
+               # 'keywords' : fetchedItem.get('keywords'),
+                'description' : fetchedItem.get('description'),
+                'lat' : fetchedItem.get('lat'),
+                'lon' : fetchedItem.get('lon'),
+                #'date_from' : fetchedItem.get('date_from'),
+                #'date_to' : fetchedItem.get('date_to')
+            }
         resp.content_type = "application/json"
         print("GET /item/"+ str(itemId), "-", resp.status)
 
@@ -59,23 +70,21 @@ class ItemResource:
         print("DELETE /item/" + str(itemId), "-", resp.status)
 
 
-class MultipleItemsResource:
+class ItemsResource:
     
     def on_get(self, req, resp):
         """Handles GET request for multiple items"""
 
         noOfItemsinStore = max(ITEMS.keys())
 
-        dictOfAllItems = {}
+        listOfAllItems = []
 
         for i in range (noOfItemsinStore):
-            dictOfAllItems[i] = datastore.get_item(i)
+            listOfAllItems.append(datastore.get_item(i))
 
-
-        
         resp.status = falcon.HTTP_200
         resp.content_type = "application/json"
-        resp.media = dictOfAllItems
+        resp.media = {'response' : listOfAllItems}
 
         print("GET /items", "-",)
 
@@ -103,17 +112,31 @@ class PostResource:
             
             datastore.create_item(inputData)
             
+
+            user_id = inputData.get("user_id")
+            keywords = inputData.get('keywords')
+            description = inputData.get("description")
+            lat = inputData.get("lat")
+            lon = inputData.get("lon")
+            
             newId = max(ITEMS.keys()) + 1
 
-            resp.media = {'id' : newId}
+            resp.media = {
+                'id' : newId,
+                'user_id' : user_id,
+               # 'keywords' : inputData.get('keywords'),
+                'description' : description,
+                'lat' : lat,
+                'lon' : lon,
+                #'date_from' : newDateFrom,
+                #'date_to' : newDateTo
+            }
             resp.status = falcon.HTTP_201
 
         else:
             resp.status = falcon.HTTP_405
         resp.content_type = "application/json"
         print("POST /item","-", resp.status)
-
-
 
 
 #Adapted from : https://github.com/falconry/falcon/issues/1220
@@ -133,7 +156,7 @@ app = falcon.App(middleware=[HandleCORS() ])
 app.add_route("/", RootResource())
 app.add_route('/item', PostResource())
 app.add_route('/item/{itemId}', ItemResource())
-app.add_route('/items', MultipleItemsResource())
+app.add_route('/items', ItemsResource())
 
 
 if __name__ == '__main__':
