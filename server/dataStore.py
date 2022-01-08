@@ -3,6 +3,8 @@
 
 
 import random
+
+# Reference for data format
 #ITEMS = {
 #
 #        "id": 1,
@@ -14,10 +16,10 @@ import random
 #        "date_from": "2021-11-22T08:22:39.067408",
 #    }
 
-#NEXT_ID = max(ITEMS.keys()) + 1
 
 
 ITEMS = {
+    #Adds initial item to datastore
     0: {
         "id": 0,
         "user_id": "user1234",
