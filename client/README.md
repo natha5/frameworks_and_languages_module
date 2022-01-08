@@ -35,4 +35,5 @@ Included files:
 
 References:
 
-*Stylesheet taken from: https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css
+* Stylesheet taken from: https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css
+* JS data fetching adapted from: https://www.geeksforgeeks.org/javascript-fetch-method/

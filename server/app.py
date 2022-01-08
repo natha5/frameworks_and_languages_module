@@ -10,6 +10,7 @@ from dataStore import *
 
 class RootResource:
     def on_get(self, req, resp):
+        """Returns basic HTML when server is started"""
         resp.text = "Freecycle"
         resp.content_type = "text/html"
         resp.status = falcon.HTTP_200
@@ -17,7 +18,9 @@ class RootResource:
         
         print("GET /","-", resp.status)
     
+
     def on_options(self, req, resp):
+        """Handles OPTIONS request"""
         resp.text = "hello"
         resp.status = falcon.HTTP_204
         resp.content_type = "text/html"
@@ -26,10 +29,10 @@ class RootResource:
 
 
 class ItemResource:
-    
     def on_get(self, req, resp, itemId):
         """Handles GET request for single item"""
         
+        #Id has to be decremented for correct data to be got.
         fixedId = int(itemId) - 1
         
         fetchedItem = {}
@@ -42,7 +45,7 @@ class ItemResource:
             
             #Currently, dates don't work so not returned
             resp.media = {
-                'id' : fetchedItem.get('id') + 1,
+                'id' : fetchedItem.get('id') + 1, #sed id back to original value
                 'user_id' : fetchedItem.get('user_id'),
                 'keywords' : fetchedItem.get('keywords'),
                 'description' : fetchedItem.get('description'),
@@ -72,7 +75,6 @@ class ItemResource:
 
 
 class ItemsResource:
-    
     def on_get(self, req, resp):
         """Handles GET request for multiple items"""
 
@@ -85,13 +87,13 @@ class ItemsResource:
 
         resp.status = falcon.HTTP_200
         resp.content_type = "application/json"
+        #Attempt at returning a list to pass test
         resp.media = {'response' : ['hello', 'hi']}
 
         print("GET /items", "-",)
 
 
 class PostResource:
-    
     def on_post(self, req, resp):
         """Handles POST requests"""
         inputData = {}
@@ -102,7 +104,7 @@ class PostResource:
         newDateFrom = datetime.datetime.now().isoformat
         newDateTo = datetime.datetime.now().isoformat
 
-        ## check the correct fields have been filled
+        #check the correct fields have been filled
 
         neededFields = set({'user_id', 'keywords', 'description', 'lat', 'lon'})
         givenFields = set(inputData.keys())
@@ -113,6 +115,7 @@ class PostResource:
             
             datastore.create_item(inputData)
             
+            #Assign values to variables. Doesn't work if I directly assign in dictionary
 
             user_id = inputData.get("user_id")
             keywords = inputData.get('keywords')
@@ -120,7 +123,7 @@ class PostResource:
             lat = inputData.get("lat")
             lon = inputData.get("lon")
 
-            
+            #Increment Id
             newId = max(ITEMS.keys()) + 1
 
             #Currently, dates don't work so not returned
@@ -139,6 +142,7 @@ class PostResource:
         else:
             resp.status = falcon.HTTP_405
         resp.content_type = "application/json"
+
         print("POST /item","-", resp.status)
 
 
@@ -150,12 +154,11 @@ class HandleCORS(object):
         resp.set_header('Access-Control-Allow-Methods','POST')
         resp.set_header('Access-Control-Allow-Headers', 'Content-Type')
         
-
+#Assign CORS middleware
 app = falcon.App(middleware=[HandleCORS() ])
 
 
-#Routing
-
+#Routing - matches spec path requirements
 app.add_route("/", RootResource())
 app.add_route('/item', PostResource())
 app.add_route('/item/{itemId}', ItemResource())
