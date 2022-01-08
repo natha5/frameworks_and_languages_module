@@ -1,19 +1,38 @@
 Client
-
-Running instructions:
-
-Run through container:
-
-cd to client folder
+======
+Running client in container:
+```bash
+cd client
 make build
 make run
+```
+ctrl + c to exit
 
-Ctrl + c to exit
 
 Running locally:
+```bash
+cd client
+make run_local
+```
+ctrl + c to exit
 
-cd to client folder
-python3 -m http.server
+Testing client:
+Either
+```bash
+cd root
+make client_test
+```
 
-Ctrl + c to exit
-======
+Client is built using Vue.js framework.
+Included files:
+* __init.py__
+* Dockerfile
+* Makefile
+* index.html
+* README.md
+* package.json
+* package-lock.json
+
+References:
+
+*Stylesheet taken from: https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css

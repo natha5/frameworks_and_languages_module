@@ -44,3 +44,8 @@ Included files:
 * Makefile
 * app.py
 * README.md
+
+References:
+
+*dataStore.py adapted from Allan's example.
+*CORS handling adapted from https://github.com/falconry/falcon/issues/1220
