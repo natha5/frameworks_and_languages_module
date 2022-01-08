@@ -46,6 +46,5 @@ Included files:
 * README.md
 
 References:
-
-*dataStore.py adapted from Allan's example.
-*CORS handling adapted from https://github.com/falconry/falcon/issues/1220
+* dataStore.py adapted from Allan's example.
+* CORS handling adapted from https://github.com/falconry/falcon/issues/1220
