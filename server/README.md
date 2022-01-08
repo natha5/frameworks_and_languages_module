@@ -1,5 +1,5 @@
 Server
-
+======
 Running server in container:
 ```bash
 cd server
@@ -16,7 +16,31 @@ make run_local
 ```
 ctrl + c to exit
 
+Testing server:
+Either
+```bash
+cd root
+make server_test
+```
+or
+```bash
+cd server
+make build
+make run
+```
+then, in another terminal:
+```bash
+cd server_test
+pip install pytest
+pytest test_api.py
+```
+
 Server is built using Falcon framework. Uses Gunicorn and httpd for container and local servers respectively.
 
-Server
-======
+Included files:
+* __init.py__
+* dataStore.py
+* Dockerfile
+* Makefile
+* app.py
+* README.md

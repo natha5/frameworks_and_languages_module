@@ -8,7 +8,6 @@ from wsgiref import simple_server
 from dataStore import *
 
 
-
 class RootResource:
     def on_get(self, req, resp):
         resp.text = "Freecycle"
@@ -40,15 +39,17 @@ class ItemResource:
             resp.status = falcon.HTTP_404
         else:
             resp.status = falcon.HTTP_200
+            
+            #Currently, dates don't work so not returned
             resp.media = {
-                "id" : fetchedItem.get('id') + 1,
-                "user_id" : fetchedItem.get('user_id'),
-               # 'keywords' : fetchedItem.get('keywords'),
+                'id' : fetchedItem.get('id') + 1,
+                'user_id' : fetchedItem.get('user_id'),
+                'keywords' : fetchedItem.get('keywords'),
                 'description' : fetchedItem.get('description'),
                 'lat' : fetchedItem.get('lat'),
                 'lon' : fetchedItem.get('lon'),
                 #'date_from' : fetchedItem.get('date_from'),
-                #'date_to' : fetchedItem.get('date_to')
+               # 'date_to' : fetchedItem.get('date_to')
             }
         resp.content_type = "application/json"
         print("GET /item/"+ str(itemId), "-", resp.status)
@@ -84,7 +85,7 @@ class ItemsResource:
 
         resp.status = falcon.HTTP_200
         resp.content_type = "application/json"
-        resp.media = {'response' : listOfAllItems}
+        resp.media = {'response' : ['hello', 'hi']}
 
         print("GET /items", "-",)
 
@@ -93,7 +94,7 @@ class PostResource:
     
     def on_post(self, req, resp):
         """Handles POST requests"""
-        inputData ={}
+        inputData = {}
         inputData = req.get_media()
         
 
@@ -118,18 +119,20 @@ class PostResource:
             description = inputData.get("description")
             lat = inputData.get("lat")
             lon = inputData.get("lon")
+
             
             newId = max(ITEMS.keys()) + 1
 
+            #Currently, dates don't work so not returned
             resp.media = {
                 'id' : newId,
                 'user_id' : user_id,
-               # 'keywords' : inputData.get('keywords'),
+                'keywords' : inputData.get('keywords'),
                 'description' : description,
                 'lat' : lat,
                 'lon' : lon,
                 #'date_from' : newDateFrom,
-                #'date_to' : newDateTo
+               # 'date_to' : newDateTo
             }
             resp.status = falcon.HTTP_201
 
