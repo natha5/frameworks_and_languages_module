@@ -23,7 +23,8 @@ cd root
 make client_test
 ```
 
-Client is built using Vue.js framework.
+Client is built using Vue.js framework, with elements of Bootstrap client layout framework
+
 Included files:
 * __init.py__
 * Dockerfile
