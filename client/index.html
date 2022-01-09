@@ -30,19 +30,19 @@
 
             <form id="form">
                 <div id="enter data">
-                    <h2>Add new data</h2>
+                    <h2 style="font-size:4vw">Add new data</h2>
             
-                    <h3>Username</h3>
+                    <h3 style="font-size:2vw">Username</h3>
                     <input name="user_id" v-model="usernameInput" type="text" placeholder="enter username">
-                    <h3>Keywords</h3>  
+                    <h3 style="font-size:2vw">Keywords</h3>  
                     <input name="keywords" v-model="keywordInput" type="text" placeholder="enter keyword" >
-                    <h3>Description</h3>
+                    <h3 style="font-size:2vw">Description</h3>
                     <input name="description" v-model="descriptionInput" type="text" placeholder="enter description">
-                    <h3>ImageURL</h3>
+                    <h3 style="font-size:2vw">ImageURL</h3>
                     <input name="image" v-model="imageInput" type="text" placeholder="enter imageURL">
-                    <h3>Latitude</h3>
+                    <h3 style="font-size:2vw">Latitude</h3>
                     <input name="lat" v-model="latInput" type="text" placeholder="enter latitude">
-                    <h3>Longitude</h3>
+                    <h3 style="font-size:2vw">Longitude</h3>
                     <input name="lon" v-model="lonInput" type="text" placeholder="enter longitude">
 
                     <button type="submit" v-on:click="createNewData()" data-action="create_item" visible>Enter data</button>
@@ -50,10 +50,10 @@
                 </div>
             </form>
             <div id="get data">
-                <h2>Get data</h2>
+                <h2 style="font-size:4vw">Get data</h2>
 
 
-                <h3>Get data by id</h3>
+                <h3 style="font-size:2vw">Get data by id</h3>
                 <input name="idSearch" v-model="searchIdInput" type="text" placeholder="enter id">
                 <button type="button" v-on:click="getData()">Get data</button>
 
